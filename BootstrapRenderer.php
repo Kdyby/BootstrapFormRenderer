@@ -1,8 +1,11 @@
 <?php
+
 /**
- * This file has been created within Animal Group
+ * This file is part of the Kdyby (http://www.kdyby.org)
  *
- * @copyright Animal Group
+ * Copyright (c) 2008, 2012 Filip Procházka (filip.prochazka@kdyby.org)
+ *
+ * For the full copyright and license information, please view the file license.txt that was distributed with this source code.
  */
 
 namespace Kdyby\Extension\Forms\BootstrapRenderer;
@@ -90,7 +93,7 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 			}
 
 			$formEl = $form->getElementPrototype();
-			if (stripos('form-', $formEl->class) === FALSE) {
+			if (!$formEl->class || stripos('form-', (string)$formEl->class) === FALSE) {
 				$formEl->addClass('form-horizontal');
 			}
 		}
@@ -260,6 +263,7 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 
 		$groupLabel = $group->getOption('label');
 		$groupDescription = $group->getOption('description');
+		$groupID = $group->getOption('id');
 
 		// If we have translator, translate!
 		if ($translator = $this->form->getTranslator()) {
@@ -282,6 +286,7 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 				}),
 			'label' => $groupLabel,
 			'description' => $groupDescription,
+			'id' => $groupID,
 		);
 	}
 
