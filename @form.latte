@@ -18,7 +18,7 @@
 {block #body}
     {* controls with group *}
     {foreach $renderer->findGroups() as $group}{block #group}
-        <fieldset>
+         <fieldset id="frm-group-{$group->label|webalize}">
             <legend n:if="$group->label">{$group->label}</legend>
             <p n:if="$group->description">{$group->description}</p>
 
