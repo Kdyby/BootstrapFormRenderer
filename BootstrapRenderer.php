@@ -263,6 +263,7 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 
 		$groupLabel = $group->getOption('label');
 		$groupDescription = $group->getOption('description');
+		$groupID = $group->getOption('id');
 
 		// If we have translator, translate!
 		if ($translator = $this->form->getTranslator()) {
@@ -285,6 +286,7 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 				}),
 			'label' => $groupLabel,
 			'description' => $groupDescription,
+			'id' => $groupID,
 		);
 	}
 
