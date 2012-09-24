@@ -36,12 +36,12 @@
             {/if}
 
             {block #control}
-            <div{!$control->getOption('pairContainer')->attributes()} n:tag-if="$control->getOption('pairContainer')">
-                {var
+            {var
                     $name = $renderer->getControlName($control),
                     $description = $renderer->getControlDescription($control),
                     $error = $renderer->getControlError($control)
                 }
+            <div{!$control->getOption('pairContainer')->attributes()} n:tag-if="$control->getOption('pairContainer') and $name !== '_token_'">
 
                 {if $controlTemplate = $renderer->getControlTemplate($control)}
                     {include "$controlTemplate", name => $name, description => $description, error => $error, form => $form, _form => $form}
