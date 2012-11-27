@@ -81,14 +81,14 @@ class FormMacros extends Latte\Macros\MacroSet
 		if ($node->isEmpty = (substr($node->args, -1) === '/')) {
 			$node->setArgs(substr($node->args, 0, -1));
 
-			return $writer->write('$form = $_form = (is_object(%node.word) ? %node.word : $_control->getComponent(%node.word)); $_form->render(NULL, %node.array);');
+			return $writer->write('$form = $__form = $_form = (is_object(%node.word) ? %node.word : $_control->getComponent(%node.word)); $_form->render(NULL, %node.array);');
 		}
 
 		$word = $node->tokenizer->fetchWord();
 		$node->isEmpty = in_array($word, array('errors', 'body', 'controls', 'buttons'));
 		$node->tokenizer->reset();
 
-		return $writer->write('$form = $_form = ' . get_called_class() . '::renderFormPart(%node.word, %node.array, get_defined_vars())');
+		return $writer->write('$form = $__form = $_form = ' . get_called_class() . '::renderFormPart(%node.word, %node.array, get_defined_vars())');
 	}
 
 
@@ -114,7 +114,7 @@ class FormMacros extends Latte\Macros\MacroSet
 			return FALSE;
 		}
 
-		return $writer->write('$_form->render($_form[%node.word])');
+		return $writer->write('$__form->render($_form[%node.word])');
 	}
 
 
@@ -129,7 +129,7 @@ class FormMacros extends Latte\Macros\MacroSet
 			return FALSE;
 		}
 
-		return $writer->write('$_form->render(is_object(%node.word) ? %node.word : $_form->getGroup(%node.word))');
+		return $writer->write('$__form->render(is_object(%node.word) ? %node.word : $_form->getGroup(%node.word))');
 	}
 
 
@@ -144,7 +144,7 @@ class FormMacros extends Latte\Macros\MacroSet
 			return FALSE;
 		}
 
-		return $writer->write('$_form->render($_form[%node.word])');
+		return $writer->write('$__form->render($_form[%node.word])');
 	}
 
 
