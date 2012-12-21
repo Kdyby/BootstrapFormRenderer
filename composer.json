@@ -1,5 +1,5 @@
 {
-    "name":"kdyby/bootstrap-form-renderer",
+    "name":"kdyby/form-renderer",
     "type":"library",
     "description":"Nette forms renderer with bootstrap",
     "keywords":["nette", "kdyby", "forms", "bootstrap"],
@@ -13,18 +13,14 @@
     ],
     "support":{
         "email":"filip@prochazka.su",
-        "issues":"https://github.com/kdyby/framework/issues"
+        "issues":"https://github.com/kdyby/form-renderer/issues"
     },
     "require":{
-        "nette/nette":"2.0.*"
-    },
-    "conflict":{
-        "kdyby/framework":"self.version"
+        "nette/nette":"*"
     },
     "autoload":{
         "psr-0":{
-            "Kdyby\\Extension\\Forms\\BootstrapRenderer":""
+            "Kdyby\\FormRenderer":"src/"
         }
-    },
-    "target-dir":"Kdyby/Extension/Forms/BootstrapRenderer"
+    }
 }
