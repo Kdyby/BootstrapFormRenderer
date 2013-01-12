@@ -1,5 +1,5 @@
 {
-    "name":"kdyby/form-renderer",
+    "name":"kdyby/bootstrap-form-renderer",
     "type":"library",
     "description":"Nette forms renderer with bootstrap",
     "keywords":["nette", "kdyby", "forms", "bootstrap"],
@@ -21,6 +21,7 @@
 	"require-dev": {
 		"nette/tester": "@dev"
 	},
+	"minimum-stability": "dev",
     "autoload":{
         "psr-0":{
             "Kdyby\\FormRenderer":"src/"
