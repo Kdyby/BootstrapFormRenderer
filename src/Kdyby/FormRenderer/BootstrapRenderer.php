@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the file license.md that was distributed with this source code.
  */
 
-namespace Kdyby\Extension\Forms\BootstrapRenderer;
+namespace Kdyby\FormRenderer;
 
 use Nette;
 use Nette\Forms\Controls;
@@ -23,7 +23,7 @@ use Nette\Utils\Html;
  * Created with twitter bootstrap in mind.
  *
  * <code>
- * $form->setRenderer(new Kdyby\Extension\Forms\BootstrapRenderer\BootstrapRenderer);
+ * $form->setRenderer(new Kdyby\FormRenderer\BootstrapRenderer);
  * </code>
  *
  * @author Pavel Ptacek
