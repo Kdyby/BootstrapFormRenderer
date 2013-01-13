@@ -1,4 +1,4 @@
-Kdyby/FormRenderer [![Build Status](https://secure.travis-ci.org/Kdyby/FormRenderer.png?branch=master)](http://travis-ci.org/Kdyby/FormRenderer)
+Kdyby/FormRenderer [![Build Status](https://secure.travis-ci.org/Kdyby/FormsBootstrapRendererExtension.png?branch=master)](http://travis-ci.org/Kdyby/FormsBootstrapRendererExtension)
 ===========================
 
 
@@ -22,4 +22,4 @@ $ composer require kdyby/bootstrap-form-renderer:@dev
 
 -----
 
-Homepage [http://www.kdyby.org](http://www.kdyby.org) and repository [http://github.com/kdyby/formrenderer](http://github.com/kdyby/formrenderer).
+Homepage [http://www.kdyby.org](http://www.kdyby.org) and repository [http://github.com/kdyby/FormsBootstrapRendererExtension](http://github.com/kdyby/FormsBootstrapRendererExtension).
