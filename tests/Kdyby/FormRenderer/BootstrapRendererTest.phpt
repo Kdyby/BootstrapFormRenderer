@@ -278,7 +278,7 @@ class BootstrapRendererTest extends TestCase
 /**
  * @author Filip Procházka <filip@prochazka.su>
  */
-class ControlMock extends \Nette\Application\UI\Control
+class ControlMock extends Nette\Application\UI\Control
 {
 
 }
