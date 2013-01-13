@@ -5,7 +5,7 @@ Kdyby/FormRenderer [![Build Status](https://secure.travis-ci.org/Kdyby/FormsBoot
 Requirements
 ------------
 
-Kdyby/Curl requires PHP 5.3.2 or higher.
+Kdyby/FormRenderer requires PHP 5.3.2 or higher.
 
 - [Nette Framework 2.0.x](https://github.com/nette/nette)
 
