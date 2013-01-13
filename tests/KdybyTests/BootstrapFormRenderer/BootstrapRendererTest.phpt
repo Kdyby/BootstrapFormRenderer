@@ -1,19 +1,19 @@
 <?php
 
 /**
- * Test: Kdyby\FormRenderer\BootstrapRenderer.
+ * Test: Kdyby\BootstrapFormRenderer\BootstrapRenderer.
  *
- * @testCase KdybyTests\FormRenderer\BootstrapRendererTest
+ * @testCase KdybyTests\BootstrapFormRenderer\BootstrapRendererTest
  * @author Filip Procházka <filip@prochazka.su>
- * @package Kdyby\FormRenderer
+ * @package Kdyby\BootstrapFormRenderer
  */
 
 namespace KdybyTests\FormRenderer;
 
 use Kdyby;
-use Kdyby\FormRenderer;
-use Kdyby\FormRenderer\BootstrapRenderer;
-use Kdyby\FormRenderer\DI\RendererExtension;
+use Kdyby\BootstrapFormRenderer;
+use Kdyby\BootstrapFormRenderer\BootstrapRenderer;
+use Kdyby\BootstrapFormRenderer\DI\RendererExtension;
 use Nette;
 use Nette\Application\UI\Form;
 use Nette\Config\Configurator;
