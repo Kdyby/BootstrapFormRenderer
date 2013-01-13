@@ -5,7 +5,7 @@
  *
  * @testCase KdybyTests\FormRenderer\BootstrapRendererTest
  * @author Filip Procházka <filip@prochazka.su>
- * @package Kdyby\Curl
+ * @package Kdyby\FormRenderer
  */
 
 namespace KdybyTests\FormRenderer;
@@ -13,10 +13,14 @@ namespace KdybyTests\FormRenderer;
 use Kdyby;
 use Kdyby\FormRenderer;
 use Kdyby\FormRenderer\BootstrapRenderer;
+use Kdyby\FormRenderer\DI\RendererExtension;
 use Nette;
 use Nette\Application\UI\Form;
+use Nette\Config\Configurator;
 use Nette\Utils\Html;
 use Nette\Utils\Strings;
+use Tester\Assert;
+use Tester\TestCase;
 
 require_once __DIR__ . '/../bootstrap.php';
 
@@ -25,8 +29,26 @@ require_once __DIR__ . '/../bootstrap.php';
 /**
  * @author Filip Procházka <filip@prochazka.su>
  */
-class BootstrapRendererTest extends LatteTestCase
+class BootstrapRendererTest extends TestCase
 {
+
+	/**
+	 * @var \Nette\DI\Container
+	 */
+	protected $container;
+
+
+
+	public function setUp()
+	{
+		$config = new Configurator();
+		$config->setTempDirectory(TEMP_DIR);
+		$config->addParameters(array('container' => array('class' => 'SystemContainer_' . md5(TEMP_DIR))));
+		RendererExtension::register($config);
+		$this->container = $config->createContainer();
+	}
+
+
 
 	/**
 	 * @return \Nette\Application\UI\Form
@@ -201,7 +223,7 @@ class BootstrapRendererTest extends LatteTestCase
 	 * @param \Nette\Application\UI\Form $form
 	 * @throws \Exception
 	 */
-	protected function assertFormTemplateOutput($latteFile, $expectedOutput, Form $form)
+	private function assertFormTemplateOutput($latteFile, $expectedOutput, Form $form)
 	{
 		$form->setRenderer(new BootstrapRenderer());
 		foreach ($form->getControls() as $control) {
@@ -213,6 +235,51 @@ class BootstrapRendererTest extends LatteTestCase
 
 		$this->assertTemplateOutput(array('form' => $form, '_form' => $form, 'control' => $control, '_control' => $control), $latteFile, $expectedOutput);
 	}
+
+
+
+	/**
+	 * @param array $params
+	 * @param string $latteFile
+	 * @param string $expectedOutput
+	 * @throws \Exception
+	 */
+	private function assertTemplateOutput(array $params, $latteFile, $expectedOutput)
+	{
+		$template = $this->container->createNette__Template();
+		/** @var \Nette\Templating\FileTemplate $template */
+		$template->setCacheStorage($this->container->getService('nette.templateCacheStorage'));
+		$template->setFile($latteFile);
+		$template->setParameters($params);
+
+		// render template
+		ob_start();
+		try {
+			$template->render();
+		} catch (\Exception $e) {
+			ob_end_clean();
+			throw $e;
+		}
+
+		$strip = function ($s) {
+			return Strings::replace($s, '#(</textarea|</pre|</script|^).*?(?=<textarea|<pre|<script|\z)#si', function ($m) {
+				return trim(preg_replace('#[ \t\r\n]{2,}#', "\n", str_replace('><', '>  <', $m[0])));
+			});
+		};
+
+		$output = $strip(Strings::normalize(ob_get_clean()));
+		$expected = $strip(Strings::normalize(file_get_contents($expectedOutput)));
+		Assert::match($expected, $output);
+	}
+
+}
+
+
+/**
+ * @author Filip Procházka <filip@prochazka.su>
+ */
+class ControlMock extends \Nette\Application\UI\Control
+{
 
 }
 
