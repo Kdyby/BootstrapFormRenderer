@@ -93,7 +93,8 @@
                         {var $prepend = $control->getOption('input-prepend'), $append = $control->getOption('input-append')}
                         <div n:class="$prepend? input-prepend, $append? input-append" n:tag-if="$prepend || $append">
                             {$prepend}{input $name}{$append}
-                        </div>{$error}{$description}
+                        </div>
+                        {$error}{$description}
                     </div>
 
                 {/if}
