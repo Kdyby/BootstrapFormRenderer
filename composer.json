@@ -1,30 +1,30 @@
 {
-    "name":"kdyby/bootstrap-form-renderer",
-    "type":"library",
-    "description":"Nette forms renderer with bootstrap",
-    "keywords":["nette", "kdyby", "forms", "bootstrap"],
-    "homepage":"http://kdyby.org",
-    "license":["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
-    "authors":[
-        {
-            "name":"Filip Procházka",
-            "homepage":"http://filip-prochazka.com"
-        }
-    ],
-    "support":{
-        "email":"filip@prochazka.su",
-        "issues":"https://github.com/kdyby/BootstrapFormRenderer/issues"
-    },
-    "require":{
-        "nette/nette":"*"
-    },
+	"name": "kdyby/bootstrap-form-renderer",
+	"type": "library",
+	"description": "Nette forms renderer with bootstrap",
+	"keywords": ["nette", "kdyby", "forms", "bootstrap"],
+	"homepage": "http://kdyby.org",
+	"license": ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
+	"authors": [
+		{
+			"name": "Filip Procházka",
+			"homepage": "http://filip-prochazka.com"
+		}
+	],
+	"support": {
+		"email": "filip@prochazka.su",
+		"issues": "https://github.com/kdyby/BootstrapFormRenderer/issues"
+	},
+	"require": {
+		"nette/nette": "*"
+	},
 	"require-dev": {
 		"nette/tester": "@dev"
 	},
 	"minimum-stability": "dev",
-    "autoload":{
-        "psr-0":{
-            "Kdyby\\BootstrapFormRenderer":"src/"
-        }
-    }
+	"autoload": {
+		"psr-0": {
+			"Kdyby\\BootstrapFormRenderer": "src/"
+		}
+	}
 }
