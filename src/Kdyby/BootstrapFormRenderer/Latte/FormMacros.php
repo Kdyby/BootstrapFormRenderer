@@ -109,10 +109,6 @@ class FormMacros extends Latte\Macros\MacroSet
 	 */
 	public function macroPair(MacroNode $node, PhpWriter $writer)
 	{
-		if ($this->validateParent($node) === FALSE) {
-			return FALSE;
-		}
-
 		return $writer->write('$__form->render($__form[%node.word])');
 	}
 
@@ -124,10 +120,6 @@ class FormMacros extends Latte\Macros\MacroSet
 	 */
 	public function macroGroup(MacroNode $node, PhpWriter $writer)
 	{
-		if ($this->validateParent($node) === FALSE) {
-			return FALSE;
-		}
-
 		return $writer->write('$__form->render(is_object(%node.word) ? %node.word : $__form->getGroup(%node.word))');
 	}
 
@@ -139,29 +131,7 @@ class FormMacros extends Latte\Macros\MacroSet
 	 */
 	public function macroContainer(MacroNode $node, PhpWriter $writer)
 	{
-		if ($this->validateParent($node) === FALSE) {
-			return FALSE;
-		}
-
 		return $writer->write('$__form->render($__form[%node.word])');
-	}
-
-
-
-	/**
-	 * @param \Nette\Latte\MacroNode $parent
-	 * @throws \Nette\Latte\CompileException
-	 * @return bool
-	 */
-	private function validateParent(MacroNode $parent)
-	{
-		while ($parent = $parent->parentNode) {
-			if ($parent->name === 'form') {
-				return TRUE;
-			}
-		}
-
-		return FALSE;
 	}
 
 
@@ -218,7 +188,11 @@ class FormMacros extends Latte\Macros\MacroSet
 	 */
 	private static function scopeVar(array $scope, $var)
 	{
-		return isset($scope['_' . $var]) ? $scope['_' . $var] : (isset($scope[$var]) ? $scope[$var] : NULL);
+		return isset($scope['__' . $var])
+			? $scope['__' . $var]
+			: (isset($scope['_' . $var])
+				? $scope['_' . $var]
+				: (isset($scope[$var]) ? $scope[$var] : NULL));
 	}
 
 }
