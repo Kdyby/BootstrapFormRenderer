@@ -35,6 +35,7 @@
                 {if !$renderer->isSubmitButton($iterator->nextValue)}{!="</div>"}{/if}
                 {?continue}
             {/if}
+			{var $attrs = ['input' => [], 'label' => []]}
 
             {block #control}
             <div{!$control->getOption('pairContainer')->attributes()} n:tag-if="$control->getOption('pairContainer')">
@@ -45,54 +46,55 @@
                 }
 
                 {if $controlTemplate = $renderer->getControlTemplate($control)}
-                    {include "$controlTemplate", name => $name, description => $description, error => $error, form => $form, _form => $form}
+                    {include "$controlTemplate", name => $name, description => $description, error => $error, form => $form, _form => $form, attrs => $attrs}
 
                 {elseif $renderer->isSubmitButton($control)}
 
-                    {input $renderer->getControlName($control)}
+                    {$renderer::mergeAttrs($form[$name]->getControl(), $attrs['input'])}
 
                 {elseif $renderer->isButton($control)}
 
                     <div class="controls">
-                        {input $name}{$error}{$description}
+						{$renderer::mergeAttrs($form[$name]->getControl(), $attrs['input'])}{$error}{$description}
                     </div>
 
                 {elseif $renderer->isCheckbox($control)}
 
+					{var $label = $renderer::mergeAttrs($form[$name]->getLabel(), $attrs['label'])}
                     <div class="controls" n:tag-if="!$renderer->controlHasClass($control, 'inline')">
-                        {label $name}{input $name}{$renderer->getLabelBody($control)}{/label}{$error}{$description}
+                        {!$label->startTag()}{$renderer::mergeAttrs($form[$name]->getControl(), $attrs['input'])}{$renderer->getLabelBody($control)}{!$label->endTag()}{$error}{$description}
                     </div>
 
                 {elseif $renderer->isRadioList($control)}
 
-                    {label $name /}
+                    {$renderer::mergeAttrs($form[$name]->getLabel(), $attrs['label'])}
 
                     <div class="controls">
                         {foreach $renderer->getRadioListItems($control) as $item}
 
-                            {$item->html}
+                            {$renderer::mergeAttrs($item->html, $attrs['input'])}
                         {/foreach}{$error}{$description}
                     </div>
 
                 {elseif $renderer->isCheckboxList($control)}
 
-                    {label $name /}
+                    {$renderer::mergeAttrs($form[$name]->getLabel(), $attrs['label'])}
 
                     <div class="controls">
                         {foreach $renderer->getCheckboxListItems($control) as $item}
 
-                            {$item->html}
+                            {$renderer::mergeAttrs($item->html, $attrs['input'])}
                         {/foreach}{$error}{$description}
                     </div>
 
                 {else}
 
-                    {label $name /}
+                    {$renderer::mergeAttrs($form[$name]->getLabel(), $attrs['label'])}
 
                     <div class="controls">
                         {var $prepend = $control->getOption('input-prepend'), $append = $control->getOption('input-append')}
                         <div n:class="$prepend? input-prepend, $append? input-append" n:tag-if="$prepend || $append">
-                            {$prepend}{input $name}{$append}
+                            {$prepend}{$renderer::mergeAttrs($form[$name]->getControl(), $attrs['input'])}{$append}
                         </div>
                         {$error}{$description}
                     </div>

@@ -129,8 +129,20 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 			FormMacros::renderFormEnd($this->form);
 
 		} else {
+
+			$attrs = array('input' => array(), 'label' => array());
+			foreach ((array) $args as $key => $val) {
+				if (stripos($key, 'input-') === 0) {
+					$attrs['input'][substr($key, 6)] = $val;
+
+				} elseif (stripos($key, 'label-') === 0) {
+					$attrs['label'][substr($key, 6)] = $val;
+				}
+			}
+
 			$this->template->setFile(__DIR__ . '/@parts.latte');
 			$this->template->mode = $mode;
+			$this->template->attrs = (array) $attrs;
 			$this->template->render();
 		}
 	}
@@ -562,6 +574,19 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 	{
 		$classes = explode(' ', self::getClasses($control->controlPrototype));
 		return in_array($class, $classes, TRUE);
+	}
+
+
+
+	/**
+	 * @param \Nette\Utils\Html $_this
+	 * @param array $attrs
+	 * @return \Nette\Utils\Html
+	 */
+	public static function mergeAttrs(Html $_this, array $attrs)
+	{
+		$_this->attrs = array_merge_recursive($_this->attrs, $attrs);
+		return $_this;
 	}
 
 

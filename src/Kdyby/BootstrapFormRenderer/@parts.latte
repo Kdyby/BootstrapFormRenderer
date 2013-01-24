@@ -29,6 +29,6 @@
     {/if}
 
 {elseif $mode instanceof \Nette\Forms\IControl}
-    {include #control, renderer => $renderer, control => $mode}
+    {include #control, renderer => $renderer, control => $mode, attrs => $attrs}
 
 {/if}

@@ -109,7 +109,7 @@ class FormMacros extends Latte\Macros\MacroSet
 	 */
 	public function macroPair(MacroNode $node, PhpWriter $writer)
 	{
-		return $writer->write('$__form->render($__form[%node.word])');
+		return $writer->write('$__form->render($__form[%node.word], %node.array)');
 	}
 
 
@@ -131,7 +131,7 @@ class FormMacros extends Latte\Macros\MacroSet
 	 */
 	public function macroContainer(MacroNode $node, PhpWriter $writer)
 	{
-		return $writer->write('$__form->render($__form[%node.word])');
+		return $writer->write('$__form->render($__form[%node.word], %node.array)');
 	}
 
 
