@@ -170,7 +170,9 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 			$el->placeholder($placeholder);
 		}
 
-		if ($control->controlPrototype->type === 'email') {
+		if ($control->controlPrototype->type === 'email'
+			&& $control->getOption('input-prepend') === NULL
+		) {
 			$control->setOption('input-prepend', '@');
 		}
 
