@@ -499,7 +499,6 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 
 
 	/**
-	 * 
 	 * @internal
 	 * @param \Nette\Forms\Controls\RadioList $control
 	 * @return bool
@@ -509,14 +508,22 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 		$items = array();
 		foreach ($control->items as $key => $value) {
 			$el = $control->getControl($key);
-			$el[1]->addClass('radio');
+			if ($el->getName() === 'input') {
+				$items[$key] = $radio = (object) array(
+					'input' => $el,
+					'label' => $cap = $control->getLabel(NULL, $key),
+					'caption' => $cap->getText(),
+				);
 
-			$items[$key] = $radio = (object)array(
-				'input' => $el[0],
-				'label' => $el[1],
-				'caption' => $el[1]->getText(),
-			);
+			} else {
+				$items[$key] = $radio = (object) array(
+					'input' => $el[0],
+					'label' => $el[1],
+					'caption' => $el[1]->getText(),
+				);
+			}
 
+			$radio->label->addClass('radio');
 			$radio->html = clone $radio->label;
 			$radio->html->insert(0, $radio->input);
 		}
@@ -585,8 +592,12 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 	 * @param array $attrs
 	 * @return \Nette\Utils\Html
 	 */
-	public static function mergeAttrs(Html $_this, array $attrs)
+	public static function mergeAttrs(Html $_this = NULL, array $attrs)
 	{
+		if ($_this === NULL) {
+			return Html::el();
+		}
+
 		$_this->attrs = array_merge_recursive($_this->attrs, $attrs);
 		return $_this;
 	}

@@ -16,6 +16,7 @@ use Kdyby\BootstrapFormRenderer\BootstrapRenderer;
 use Kdyby\BootstrapFormRenderer\DI\RendererExtension;
 use Nette;
 use Nette\Application\UI\Form;
+use Nette\Caching\Storages\PhpFileStorage;
 use Nette\Config\Configurator;
 use Nette\Utils\Html;
 use Nette\Utils\Strings;
@@ -202,7 +203,7 @@ class BootstrapRendererTest extends TestCase
 
 		$control->addComponent($b = new Form, 'b');
 		$b->addText('mam', 'Mam');
-		$b->setRenderer(new BootstrapRenderer());
+		$b->setRenderer(new BootstrapRenderer($this->createTemplate()));
 
 		$this->assertTemplateOutput(array(
 			'control' => $control, '_control' => $control
@@ -225,15 +226,30 @@ class BootstrapRendererTest extends TestCase
 	 */
 	private function assertFormTemplateOutput($latteFile, $expectedOutput, Form $form)
 	{
-		$form->setRenderer(new BootstrapRenderer());
+		$form->setRenderer(new BootstrapRenderer($this->createTemplate()));
 		foreach ($form->getControls() as $control) {
 			$control->setOption('rendered', FALSE);
+		}
+
+		if (property_exists($form, 'httpRequest')) {
+			$form->httpRequest = new Nette\Http\Request(new Nette\Http\UrlScript('http://www.kdyby.org'));
+		}
+		foreach ($form->getComponents(TRUE, 'Nette\Forms\Controls\CsrfProtection') as $control) {
+			/** @var \Nette\Forms\Controls\CsrfProtection $control */
+			$control->session = new Nette\Http\Session($form->httpRequest, new Nette\Http\Response);
+			$control->session->setStorage(new ArraySessionStorage($control->session));
+			$control->session->start();
 		}
 
 		$control = new ControlMock();
 		$control['foo'] = $form;
 
 		$this->assertTemplateOutput(array('form' => $form, '_form' => $form, 'control' => $control, '_control' => $control), $latteFile, $expectedOutput);
+
+		foreach ($form->getComponents(TRUE, 'Nette\Forms\Controls\CsrfProtection') as $control) {
+			/** @var \Nette\Forms\Controls\CsrfProtection $control */
+			$control->session->close();
+		}
 	}
 
 
@@ -246,11 +262,7 @@ class BootstrapRendererTest extends TestCase
 	 */
 	private function assertTemplateOutput(array $params, $latteFile, $expectedOutput)
 	{
-		$template = $this->container->{$this->container->getMethodName('nette.template', FALSE)}();
-		/** @var \Nette\Templating\FileTemplate $template */
-		$template->setCacheStorage($this->container->getService('nette.templateCacheStorage'));
-		$template->setFile($latteFile);
-		$template->setParameters($params);
+		$template = $this->createTemplate()->setFile($latteFile)->setParameters($params);
 
 		// render template
 		ob_start();
@@ -272,6 +284,19 @@ class BootstrapRendererTest extends TestCase
 		Assert::match($expected, $output);
 	}
 
+
+
+	/**
+	 * @return Nette\Templating\FileTemplate
+	 */
+	private function createTemplate()
+	{
+		$template = $this->container->{$this->container->getMethodName('nette.template', FALSE)}();
+		/** @var \Nette\Templating\FileTemplate $template */
+		$template->setCacheStorage(new PhpFileStorage($this->container->expand('%tempDir%/cache'), $this->container->getService('nette.cacheJournal')));
+		return $template;
+	}
+
 }
 
 
@@ -282,5 +307,71 @@ class ControlMock extends Nette\Application\UI\Control
 {
 
 }
+
+/**
+ * Třída existuje, aby se vůbec neukládala session, tam kde není potřeba.
+ * Například v API, nebo v Cronu se různě sahá na session, i když se reálně mezi requesty nepřenáší.
+ *
+ * @internal
+ */
+class ArraySessionStorage extends Nette\Object implements Nette\Http\ISessionStorage
+{
+
+	/**
+	 * @var array
+	 */
+	private $session;
+
+
+
+	public function __construct(Nette\Http\Session $session = NULL)
+	{
+		$session->setOptions(array('cookie_disabled' => TRUE));
+	}
+
+
+
+	public function open($savePath, $sessionName)
+	{
+		$this->session = array();
+	}
+
+
+
+	public function close()
+	{
+		$this->session = array();
+	}
+
+
+
+	public function read($id)
+	{
+		return isset($this->session[$id]) ? $this->session[$id] : NULL;
+	}
+
+
+
+	public function write($id, $data)
+	{
+		$this->session[$id] = $data;
+	}
+
+
+
+	public function remove($id)
+	{
+		unset($this->session[$id]);
+	}
+
+
+
+	public function clean($maxlifetime)
+	{
+
+	}
+
+}
+
 
 run(new BootstrapRendererTest());

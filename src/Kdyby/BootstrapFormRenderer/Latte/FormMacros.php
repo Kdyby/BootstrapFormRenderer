@@ -16,6 +16,7 @@ use Nette\Forms\Form;
 use Nette\Latte;
 use Nette\Latte\MacroNode;
 use Nette\Latte\PhpWriter;
+use Nette\Reflection\ClassType;
 
 
 
@@ -71,6 +72,31 @@ class FormMacros extends Latte\Macros\MacroSet
 
 
 	/**
+	 * @return Latte\Token
+	 */
+	private function findCurrentToken()
+	{
+		static $positionRef, $tokensRef;
+
+		if (!property_exists('Nette\Latte\Token', 'empty')) {
+			return NULL;
+		}
+
+		if (empty($positionRef)) {
+			$compilerRef = ClassType::from($this->getCompiler());
+			$positionRef = $compilerRef->getProperty('position');
+			$positionRef->setAccessible(TRUE);
+			$tokensRef = $compilerRef->getProperty('tokens');
+			$tokensRef->setAccessible(TRUE);
+		}
+
+		$tokens = $tokensRef->getValue($this->getCompiler());
+		return $tokens[$positionRef->getValue($this->getCompiler())];
+	}
+
+
+
+	/**
 	 * @param \Nette\Latte\MacroNode $node
 	 * @param \Nette\Latte\PhpWriter $writer
 	 * @return string
@@ -80,6 +106,10 @@ class FormMacros extends Latte\Macros\MacroSet
 		if ($node->isEmpty = (substr($node->args, -1) === '/')) {
 			$node->setArgs(substr($node->args, 0, -1));
 
+			return $writer->write('$form = $__form = $_form = (is_object(%node.word) ? %node.word : $_control->getComponent(%node.word)); $__form->render(NULL, %node.array);');
+
+		} elseif (($token = $this->findCurrentToken()) && $token->empty) {
+			// $node->isEmpty = TRUE;
 			return $writer->write('$form = $__form = $_form = (is_object(%node.word) ? %node.word : $_control->getComponent(%node.word)); $__form->render(NULL, %node.array);');
 		}
 
@@ -98,6 +128,10 @@ class FormMacros extends Latte\Macros\MacroSet
 	 */
 	public function macroFormEnd(MacroNode $node, PhpWriter $writer)
 	{
+		if (($token = $this->findCurrentToken()) && $token->empty) {
+			return '';
+		}
+
 		return $writer->write('Nette\Latte\Macros\FormMacros::renderFormEnd($__form)');
 	}
 
