@@ -9,17 +9,24 @@
  */
 
 namespace Kdyby\BootstrapFormRenderer\DI;
+
 use Kdyby;
-use Nette\Config\Compiler;
-use Nette\Config\Configurator;
+use Nette\DI\Compiler;
 use Nette;
 
 
 
+if (!class_exists('Nette\DI\CompilerExtension')) {
+	class_alias('Nette\Config\CompilerExtension', 'Nette\DI\CompilerExtension');
+	class_alias('Nette\Config\Configurator', 'Nette\Configurator');
+	class_alias('Nette\Config\Compiler', 'Nette\DI\Compiler');
+	class_alias('Nette\Config\Helpers', 'Nette\DI\Config\Helpers');
+}
+
 /**
  * @author Filip Procházka <filip@prochazka.su>
  */
-class RendererExtension extends Nette\Config\CompilerExtension
+class RendererExtension extends Nette\DI\CompilerExtension
 {
 
 	public function loadConfiguration()
@@ -34,11 +41,11 @@ class RendererExtension extends Nette\Config\CompilerExtension
 
 
 	/**
-	 * @param \Nette\Config\Configurator $config
+	 * @param \Nette\Configurator $config
 	 */
-	public static function register(Configurator $config)
+	public static function register(Nette\Configurator $config)
 	{
-		$config->onCompile[] = function (Configurator $config, Compiler $compiler) {
+		$config->onCompile[] = function (Nette\Configurator $config, Compiler $compiler) {
 			$compiler->addExtension('twBootstrapRenderer', new RendererExtension());
 		};
 	}
