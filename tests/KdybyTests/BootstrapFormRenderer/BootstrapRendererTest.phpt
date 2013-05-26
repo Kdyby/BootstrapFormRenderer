@@ -246,7 +246,7 @@ class BootstrapRendererTest extends TestCase
 	 */
 	private function assertTemplateOutput(array $params, $latteFile, $expectedOutput)
 	{
-		$template = $this->container->createNette__Template();
+		$template = $this->container->{$this->container->getMethodName('nette.template', FALSE)}();
 		/** @var \Nette\Templating\FileTemplate $template */
 		$template->setCacheStorage($this->container->getService('nette.templateCacheStorage'));
 		$template->setFile($latteFile);
