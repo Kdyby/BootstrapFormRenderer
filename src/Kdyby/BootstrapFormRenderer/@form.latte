@@ -67,7 +67,7 @@
 
                 {elseif $renderer->isRadioList($control)}
 
-                    {$renderer::mergeAttrs($form[$name]->getLabel(), $attrs['label'])}
+                    {$renderer::mergeAttrs($form[$name]->getLabel()->addClass("control-label"), $attrs['label'])}
 
                     <div class="controls">
                         {foreach $renderer->getRadioListItems($control) as $item}
@@ -78,7 +78,7 @@
 
                 {elseif $renderer->isCheckboxList($control)}
 
-                    {$renderer::mergeAttrs($form[$name]->getLabel(), $attrs['label'])}
+                    {$renderer::mergeAttrs($form[$name]->getLabel()->addClass("control-label"), $attrs['label'])}
 
                     <div class="controls">
                         {foreach $renderer->getCheckboxListItems($control) as $item}

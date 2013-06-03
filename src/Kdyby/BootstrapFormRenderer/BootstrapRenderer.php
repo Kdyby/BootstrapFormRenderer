@@ -184,7 +184,7 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 			if ($control instanceof Controls\Checkbox) {
 				$label->addClass('checkbox');
 
-			} else {
+			} elseif (!$control instanceof Controls\RadioList) {
 				$label->addClass('control-label');
 			}
 
