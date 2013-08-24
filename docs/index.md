@@ -21,13 +21,13 @@ Kdyby/BootstrapRenderer requires PHP 5.3.2 or higher.
 If you wanna use the special macros, you have to register them into Latte Engine
 
 ```php
-Kdyby\Extension\Forms\BootstrapRenderer\Latte\FormMacros::install($engine->compiler);
+Kdyby\BootstrapFormRenderer\Latte\FormMacros::install($engine->compiler);
 ```
 
 Or simply register the extension in `app/bootstrap.php` to allow them globally
 
 ```php
-Kdyby\Extension\Forms\BootstrapRenderer\DI\RendererExtension::register($configurator);
+Kdyby\BootstrapFormRenderer\DI\RendererExtension::register($configurator);
 ```
 
 
