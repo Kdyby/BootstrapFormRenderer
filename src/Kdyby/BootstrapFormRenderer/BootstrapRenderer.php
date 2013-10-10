@@ -187,8 +187,11 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 			} elseif (!$control instanceof Controls\RadioList) {
 				$label->addClass('control-label');
 			}
-
-			$control->setOption('pairContainer', $pair = Html::el('div'));
+                        
+			if ( !($pair = $control->getOption('pairContainer', FALSE)) ) {
+				$control->setOption('pairContainer', $pair = Html::el('div'));
+			}
+                        
 			$pair->id = $control->htmlId . '-pair';
 			$pair->addClass('control-group');
 			if ($control->getOption('required', FALSE)) {
@@ -206,6 +209,11 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 
 			if ($append = $control->getOption('input-append')) {
 				$append = Html::el('span', array('class' => 'add-on'))
+					->{$append instanceof Html ? 'add' : 'setText'}($append);
+				$control->setOption('input-append', $append);
+			}
+			elseif ($append = $control->getOption('button-append')) {
+				$append = Html::el('button', array('class' => 'btn', 'type' => 'button', 'id' => $control->getHtmlId()."-button"))
 					->{$append instanceof Html ? 'add' : 'setText'}($append);
 				$control->setOption('input-append', $append);
 			}
