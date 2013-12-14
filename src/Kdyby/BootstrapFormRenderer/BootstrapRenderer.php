@@ -568,7 +568,6 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 	public static function getLabelBody(Controls\BaseControl $control)
 	{
 		$label = $control->getLabel();
-		$label->setName(NULL);
 		return $label;
 	}
 
