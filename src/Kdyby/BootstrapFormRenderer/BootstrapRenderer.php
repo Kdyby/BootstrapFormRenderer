@@ -507,11 +507,11 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 	{
 		$items = array();
 		foreach ($control->items as $key => $value) {
-			$el = $control->getControl($key);
+			$el = $control->getControlPart($key);
 			if ($el->getName() === 'input') {
 				$items[$key] = $radio = (object) array(
 					'input' => $el,
-					'label' => $cap = $control->getLabel(NULL, $key),
+					'label' => $cap = $control->getLabelPart($key),
 					'caption' => $cap->getText(),
 				);
 
@@ -568,7 +568,6 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 	public static function getLabelBody(Controls\BaseControl $control)
 	{
 		$label = $control->getLabel();
-		$label->setName(NULL);
 		return $label;
 	}
 
