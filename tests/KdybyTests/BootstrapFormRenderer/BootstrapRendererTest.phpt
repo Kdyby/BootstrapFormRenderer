@@ -17,7 +17,7 @@ use Kdyby\BootstrapFormRenderer\DI\RendererExtension;
 use Nette;
 use Nette\Application\UI\Form;
 use Nette\Caching\Storages\PhpFileStorage;
-use Nette\Config\Configurator;
+use Nette\Configurator;
 use Nette\Utils\Html;
 use Nette\Utils\Strings;
 use Tester\Assert;
@@ -93,7 +93,7 @@ class BootstrapRendererTest extends TestCase
 	 */
 	public function dataRenderingBasics()
 	{
-		return array_map(function ($f) { return array($f); }, glob(__DIR__ . '/basic/input/*.latte'));
+		return array_map(function ($f) { return array(basename($f)); }, glob(__DIR__ . '/basic/input/*.latte'));
 	}
 
 
@@ -106,7 +106,7 @@ class BootstrapRendererTest extends TestCase
 	public function testRenderingBasics($latteFile)
 	{
 		$form = $this->dataCreateRichForm();
-		$this->assertFormTemplateOutput($latteFile, __DIR__ . '/basic/output/' . basename($latteFile, '.latte') . '.html', $form);
+		$this->assertFormTemplateOutput(__DIR__ . '/basic/input/' . $latteFile, __DIR__ . '/basic/output/' . basename($latteFile, '.latte') . '.html', $form);
 	}
 
 
@@ -116,7 +116,7 @@ class BootstrapRendererTest extends TestCase
 	 */
 	public function dataRenderingComponents()
 	{
-		return array_map(function ($f) { return array($f); }, glob(__DIR__ . '/components/input/*.latte'));
+		return array_map(function ($f) { return array(basename($f)); }, glob(__DIR__ . '/components/input/*.latte'));
 	}
 
 
@@ -130,7 +130,7 @@ class BootstrapRendererTest extends TestCase
 	{
 		// create form
 		$form = $this->dataCreateRichForm();
-		$this->assertFormTemplateOutput($latteFile, __DIR__ . '/components/output/' . basename($latteFile, '.latte') . '.html', $form);
+		$this->assertFormTemplateOutput(__DIR__ . '/components/input/' . $latteFile, __DIR__ . '/components/output/' . basename($latteFile, '.latte') . '.html', $form);
 	}
 
 
@@ -176,7 +176,7 @@ class BootstrapRendererTest extends TestCase
 	 */
 	public function dataRenderingIndividual()
 	{
-		return array_map(function ($f) { return array($f); }, glob(__DIR__ . '/individual/input/*.latte'));
+		return array_map(function ($f) { return array(basename($f)); }, glob(__DIR__ . '/individual/input/*.latte'));
 	}
 
 
@@ -188,7 +188,7 @@ class BootstrapRendererTest extends TestCase
 	public function testRenderingIndividual($latteFile)
 	{
 		$form = $this->dataCreateForm();
-		$this->assertFormTemplateOutput($latteFile, __DIR__ . '/individual/output/' . basename($latteFile, '.latte') . '.html', $form);
+		$this->assertFormTemplateOutput(__DIR__ . '/individual/input/' . $latteFile, __DIR__ . '/individual/output/' . basename($latteFile, '.latte') . '.html', $form);
 	}
 
 

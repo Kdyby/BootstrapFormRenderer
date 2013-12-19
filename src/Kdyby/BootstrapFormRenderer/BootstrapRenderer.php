@@ -9,6 +9,7 @@
  */
 
 namespace Kdyby\BootstrapFormRenderer;
+
 use Nette;
 use Nette\Forms\Controls;
 use Nette\Iterators\Filter;
@@ -219,9 +220,7 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 	 */
 	public function findErrors()
 	{
-		$formErrors = method_exists($this->form, 'getAllErrors')
-			? $this->form->getAllErrors()
-			: $this->form->getErrors();
+		$formErrors = $this->form->getErrors();
 
 		if (!$formErrors) {
 			return array();
@@ -242,20 +241,7 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 			return $translate($formErrors);
 		}
 
-		if (method_exists($this->form, 'getAllErrors')) {
-			return $translate($this->form->getErrors());
-		}
-
-		foreach ($this->form->getControls() as $control) {
-			/** @var \Nette\Forms\Controls\BaseControl $control */
-			if (!$control->hasErrors()) {
-				continue;
-			}
-
-			$formErrors = array_diff($formErrors, $control->getErrors());
-		}
-
-		return $translate($formErrors);
+		return $translate($this->form->getErrors());
 	}
 
 
