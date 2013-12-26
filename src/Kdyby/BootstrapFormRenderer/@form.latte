@@ -18,7 +18,7 @@
 {* controls with group *}
 {foreach $renderer->findGroups() as $group}{block #group}
 
-    <fieldset{!$group->attrs->attributes()}>
+    <fieldset{$group->attrs->attributes()|noescape}>
         <legend n:if="$group->label">{$group->label}</legend>
         <p n:if="$group->description">{$group->description}</p>
 
@@ -30,15 +30,15 @@
             {block #controls}
             {foreach $controls as $control}
             {if $renderer->isSubmitButton($control)}
-                {if $iterator->first}{!='<div class="form-actions">'}{/if}
+                {if $iterator->first}{='<div class="form-actions">'|noescape}{/if}
                 {input $renderer->getControlName($control)}
-                {if !$renderer->isSubmitButton($iterator->nextValue)}{!="</div>"}{/if}
+                {if !$renderer->isSubmitButton($iterator->nextValue)}{="</div>"|noescape}{/if}
                 {?continue}
             {/if}
 			{var $attrs = ['input' => [], 'label' => []]}
 
             {block #control}
-            <div{!$control->getOption('pairContainer')->attributes()} n:tag-if="$control->getOption('pairContainer')">
+            <div{$control->getOption('pairContainer')->attributes()|noescape} n:tag-if="$control->getOption('pairContainer')">
                 {var
                     $name = $renderer->getControlName($control),
                     $description = $renderer->getControlDescription($control),
@@ -62,7 +62,7 @@
 
 					{var $label = $renderer::mergeAttrs($form[$name]->getLabel(), $attrs['label'])}
                     <div class="controls" n:tag-if="!$renderer->controlHasClass($control, 'inline')">
-                        {!$label->startTag()}{$renderer::mergeAttrs($form[$name]->getControl(), $attrs['input'])}{$renderer->getLabelBody($control)}{!$label->endTag()}{$error}{$description}
+                        {$label->startTag()|noescape}{$renderer::mergeAttrs($form[$name]->getControl(), $attrs['input'])}{$renderer->getLabelBody($control)}{$label->endTag()|noescape}{$error}{$description}
                     </div>
 
                 {elseif $renderer->isRadioList($control)}
@@ -103,7 +103,7 @@
             </div>
             {/block}
 
-            {if $renderer->isSubmitButton($iterator->nextValue)}{!='<div class="form-actions">'}{/if}
+            {if $renderer->isSubmitButton($iterator->nextValue)}{='<div class="form-actions">'|noescape}{/if}
             {/foreach}
             {/block}
 
