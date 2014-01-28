@@ -32,6 +32,12 @@ use Nette\Utils\Html;
 class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRenderer
 {
 
+	public static $checkboxListClasses = array(
+		'Nextras\Forms\Controls\MultiOptionList',
+		'Nette\Forms\Controls\CheckboxList',
+		'Kdyby\Forms\Controls\CheckboxList',
+	);
+
 	/**
 	 * set to false, if you want to display the field errors also as form errors
 	 * @var bool
@@ -185,7 +191,7 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 			if ($control instanceof Controls\Checkbox) {
 				$label->addClass('checkbox');
 
-			} elseif (!$control instanceof Controls\RadioList) {
+			} elseif (!$control instanceof Controls\RadioList && !self::isCheckboxList($control)) {
 				$label->addClass('control-label');
 			}
 
@@ -473,8 +479,8 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 	 */
 	public static function isCheckboxList(Nette\Forms\IControl $control)
 	{
-		foreach (array('Nette\Forms\Controls\\', 'Kdyby\Forms\Controls\\', '',) as $ns) {
-			if (class_exists($class = $ns . 'CheckboxList', FALSE) && $control instanceof $class) {
+		foreach (static::$checkboxListClasses as $class) {
+			if (class_exists($class, FALSE) && $control instanceof $class) {
 				return TRUE;
 			}
 		}
@@ -529,16 +535,35 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 	{
 		$items = array();
 		foreach ($control->items as $key => $value) {
-			$el = $control->getControl($key);
-			$el[1]->addClass('checkbox')->addClass('inline');
-
-			$items[$key] = $check = (object)array(
-				'input' => $el[0],
-				'label' => $el[1],
-				'caption' => $el[1]->getText(),
-			);
-
+			if (method_exists($control, 'getControlPart')) {
+				$el = $control->getControlPart($key);
+				$items[$key] = $check = (object) array(
+					'input'   => $el,
+					'label'   => $cap = $control->getLabelPart($key),
+					'caption' => $cap->getText(),
+				);
+			} else {
+				$el = $control->getControl($key);
+				if (is_string($el)) {
+					$items[$key] = $check = (object) array(
+						'input'   => Html::el()->setHtml($el),
+						'label'   => Html::el(),
+						'caption' => $value,
+					);
+				} else {
+					$items[$key] = $check = (object) array(
+						'input'   => $el[0],
+						'label'   => $el[1],
+						'caption' => $el[1]->getText(),
+					);
+				}
+			}
 			$check->html = clone $check->label;
+			$check->html->addClass('checkbox');
+			$display = $control->getOption('display', 'inline');
+			if ($display == 'inline') {
+				$check->html->addClass($display);
+			}
 			$check->html->insert(0, $check->input);
 		}
 
