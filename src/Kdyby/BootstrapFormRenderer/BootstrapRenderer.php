@@ -18,6 +18,10 @@ use Nette\Templating\FileTemplate;
 use Nette\Utils\Html;
 
 
+if (!class_exists('Nette\Latte\Macros\FormMacros')) {
+	class_alias('Nette\Bridges\FormsLatte\FormMacros', 'Nette\Latte\Macros\FormMacros');
+}
+
 
 /**
  * Created with twitter bootstrap in mind.
