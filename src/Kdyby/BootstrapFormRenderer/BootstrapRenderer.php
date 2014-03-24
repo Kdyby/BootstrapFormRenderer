@@ -13,10 +13,14 @@ namespace Kdyby\BootstrapFormRenderer;
 use Nette;
 use Nette\Forms\Controls;
 use Nette\Iterators\Filter;
-use Nette\Latte\Macros\FormMacros;
+use Nette\Bridges\FormsLatte\FormMacros;
 use Nette\Templating\FileTemplate;
 use Nette\Utils\Html;
 
+
+if (!class_exists('Nette\Bridges\FormsLatte\FormMacros')) {
+	class_alias('Nette\Latte\Macros\FormMacros', 'Nette\Bridges\FormsLatte\FormMacros');
+}
 
 
 /**
