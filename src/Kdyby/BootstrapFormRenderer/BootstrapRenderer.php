@@ -343,7 +343,7 @@ class BootstrapRenderer extends Nette\Object implements Nette\Forms\IFormRendere
 		$groupAttrs = $group->getOption('container', Html::el())->setName(NULL);
 		/** @var Html $groupAttrs */
 		$groupAttrs->attrs += array_diff_key($group->getOptions(), array_fill_keys(array(
-			'container', 'label', 'description', 'visual' // these are not attributes
+			'container', 'label', 'description', 'visual', 'template', // these are not attributes
 		), NULL));
 
 		// fake group

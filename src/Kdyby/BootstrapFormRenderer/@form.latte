@@ -24,7 +24,7 @@
 
         {var $controls = $group->controls}
         {if isset($group->template) && $group->template}
-            {include "$group->template", group => $group, controls => $controls, form => $form, _form => $form}
+            {include "$group->template", group => $group, controls => $controls, form => $form, _form => $form, __form => $form}
 
         {else}
             {block #controls}
@@ -46,7 +46,7 @@
                 }
 
                 {if $controlTemplate = $renderer->getControlTemplate($control)}
-                    {include "$controlTemplate", name => $name, description => $description, error => $error, form => $form, _form => $form, attrs => $attrs}
+                    {include "$controlTemplate", name => $name, description => $description, error => $error, form => $form, _form => $form, __form => $form, attrs => $attrs}
 
                 {elseif $renderer->isSubmitButton($control)}
 
