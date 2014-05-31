@@ -1,5 +1,9 @@
-Kdyby/BootstrapFormRenderer [![Build Status](https://secure.travis-ci.org/Kdyby/BootstrapFormRenderer.png?branch=master)](http://travis-ci.org/Kdyby/BootstrapFormRenderer)
-===========================
+Kdyby/BootstrapFormRenderer
+======
+
+[![Build Status](https://travis-ci.org/Kdyby/BootstrapFormRenderer.svg?branch=master)](https://travis-ci.org/Kdyby/BootstrapFormRenderer)
+[![Downloads this Month](https://img.shields.io/packagist/dm/Kdyby/BootstrapFormRenderer.svg)](https://packagist.org/packages/Kdyby/BootstrapFormRenderer)
+[![Latest stable](img.shields.io/packagist/v/Kdyby/BootstrapFormRenderer.svg)](https://packagist.org/packages/Kdyby/BootstrapFormRenderer)
 
 
 Requirements
