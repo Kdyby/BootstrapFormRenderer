@@ -2,7 +2,7 @@ Kdyby/BootstrapFormRenderer
 ======
 
 [![Build Status](https://travis-ci.org/Kdyby/BootstrapFormRenderer.svg?branch=master)](https://travis-ci.org/Kdyby/BootstrapFormRenderer)
-[![Downloads this Month](https://img.shields.io/packagist/dm/Kdyby/BootstrapFormRenderer.svg)](https://packagist.org/packages/Kdyby/BootstrapFormRenderer)
+[![Downloads this Month](https://img.shields.io/packagist/dm/kdyby/bootstrap-form-renderer.svg)](https://packagist.org/packages/kdyby/bootstrap-form-renderer)
 [![Latest stable](https://img.shields.io/packagist/v/kdyby/bootstrap-form-renderer.svg)](https://packagist.org/packages/kdyby/bootstrap-form-renderer)
 
 
