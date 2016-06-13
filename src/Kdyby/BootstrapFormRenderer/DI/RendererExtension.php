@@ -36,7 +36,7 @@ class RendererExtension extends Nette\DI\CompilerExtension
 	public function loadConfiguration()
 	{
 		$builder = $this->getContainerBuilder();
-		$engine = $builder->getDefinition('nette.latte');
+		$engine = $builder->getDefinition('nette.latteFactory');
 
 		$install = 'Kdyby\BootstrapFormRenderer\Latte\FormMacros::install';
 		$engine->addSetup($install . '(?->getCompiler())', array('@self'));
