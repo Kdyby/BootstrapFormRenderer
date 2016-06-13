@@ -11,11 +11,13 @@
 namespace Kdyby\BootstrapFormRenderer\Latte;
 use Kdyby;
 use Kdyby\BootstrapFormRenderer\BootstrapRenderer;
-use Nette;
+use Latte\Compiler;
+use Latte\MacroNode;
+use Latte\Macros\MacroSet;
+use Latte\PhpWriter;
+use Latte\Token;
 use Nette\Forms\Form;
-use Nette\Latte;
-use Nette\Latte\MacroNode;
-use Nette\Latte\PhpWriter;
+use Nette\InvalidStateException;
 use Nette\Reflection\ClassType;
 
 
@@ -56,14 +58,14 @@ if (!class_exists('Nette\Bridges\FormsLatte\FormMacros')) {
  *
  * @author Filip Procházka <filip@prochazka.su>
  */
-class FormMacros extends Latte\Macros\MacroSet
+class FormMacros extends MacroSet
 {
 
 	/**
-	 * @param \Nette\Latte\Compiler $compiler
-	 * @return \Nette\Latte\Macros\MacroSet|void
+	 * @param Compiler $compiler
+	 * @return MacroSet|void
 	 */
-	public static function install(Latte\Compiler $compiler)
+	public static function install(Compiler $compiler)
 	{
 		$me = new static($compiler);
 		$me->addMacro('form', array($me, 'macroFormBegin'), array($me, 'macroFormEnd'));
@@ -76,7 +78,7 @@ class FormMacros extends Latte\Macros\MacroSet
 
 
 	/**
-	 * @return Latte\Token
+	 * @return Token
 	 */
 	private function findCurrentToken()
 	{
@@ -101,8 +103,8 @@ class FormMacros extends Latte\Macros\MacroSet
 
 
 	/**
-	 * @param \Nette\Latte\MacroNode $node
-	 * @param \Nette\Latte\PhpWriter $writer
+	 * @param MacroNode $node
+	 * @param PhpWriter $writer
 	 * @return string
 	 */
 	public function macroFormBegin(MacroNode $node, PhpWriter $writer)
@@ -124,11 +126,10 @@ class FormMacros extends Latte\Macros\MacroSet
 		return $writer->write('$form = $__form = $_form = ' . get_called_class() . '::renderFormPart(%node.word, %node.array, get_defined_vars())');
 	}
 
-
-
 	/**
-	 * @param \Nette\Latte\MacroNode $node
-	 * @param \Nette\Latte\PhpWriter $writer
+	 * @param MacroNode $node
+	 * @param PhpWriter $writer
+	 * @return string
 	 */
 	public function macroFormEnd(MacroNode $node, PhpWriter $writer)
 	{
@@ -139,47 +140,42 @@ class FormMacros extends Latte\Macros\MacroSet
 		return $writer->write('Nette\Bridges\FormsLatte\FormMacros::renderFormEnd($__form)');
 	}
 
-
-
 	/**
-	 * @param \Nette\Latte\MacroNode $node
-	 * @param \Nette\Latte\PhpWriter $writer
+	 * @param MacroNode $node
+	 * @param PhpWriter $writer
+	 * @return string
 	 */
 	public function macroPair(MacroNode $node, PhpWriter $writer)
 	{
 		return $writer->write('$__form->render($__form[%node.word], %node.array)');
 	}
 
-
-
 	/**
-	 * @param \Nette\Latte\MacroNode $node
-	 * @param \Nette\Latte\PhpWriter $writer
+	 * @param MacroNode $node
+	 * @param PhpWriter $writer
+	 * @return string
 	 */
 	public function macroGroup(MacroNode $node, PhpWriter $writer)
 	{
 		return $writer->write('$__form->render(is_object(%node.word) ? %node.word : $__form->getGroup(%node.word))');
 	}
 
-
-
 	/**
-	 * @param \Nette\Latte\MacroNode $node
-	 * @param \Nette\Latte\PhpWriter $writer
+	 * @param MacroNode $node
+	 * @param PhpWriter $writer
+	 * @return string
 	 */
 	public function macroContainer(MacroNode $node, PhpWriter $writer)
 	{
 		return $writer->write('$__form->render($__form[%node.word], %node.array)');
 	}
 
-
-
 	/**
 	 * @param string $mode
-	 * @param array $args
-	 * @param array $scope
-	 * @throws \Nette\InvalidStateException
-	 * @return \Nette\Forms\Form
+	 * @param array  $args
+	 * @param array  $scope
+	 * @return Form
+	 * @throws InvalidStateException
 	 */
 	public static function renderFormPart($mode, array $args, array $scope)
 	{
@@ -195,7 +191,7 @@ class FormMacros extends Latte\Macros\MacroSet
 			$form->render($mode, $args);
 
 		} else {
-			throw new Nette\InvalidStateException('No instanceof Nette\Forms\Form found in local scope.');
+			throw new InvalidStateException('No instanceof Nette\Forms\Form found in local scope.');
 		}
 
 		return $form;
@@ -213,7 +209,7 @@ class FormMacros extends Latte\Macros\MacroSet
 			$form->render('begin', $args);
 
 		} else {
-			Nette\Bridges\FormsLatte\FormMacros::renderFormBegin($form, $args);
+			\Nette\Bridges\FormsLatte\FormMacros::renderFormBegin($form, $args);
 		}
 	}
 
