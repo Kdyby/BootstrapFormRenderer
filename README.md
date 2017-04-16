@@ -37,7 +37,7 @@ $ composer require kdyby/bootstrap-form-renderer:@dev
 Documentation
 ------------
 
-Learn more in the [documentation](https://github.com/Kdyby/BootstrapFormRenderer/blob/master/docs/en/index.md).
+Learn more in the [documentation](https://github.com/Kdyby/BootstrapFormRenderer/blob/master/docs/index.md).
 
 
 -----
